@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>multiple choice</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    body { 
+      margin: 0; 
+      padding: 0; 
+      background-color: transparent; 
+      font-family: 'Montserrat', sans-serif; 
+      color: white; 
+      overflow-x: hidden;
+    }
+    
+    .wrapper { 
+      padding: 10px; 
+      width: 100%; 
+      max-width: 900px; 
+      margin: 0 auto; 
+      box-sizing: border-box; 
+    }
+
+    .action-card {
+      background: #000;
+      border-left: 6px solid #D30000;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      transition: all 0.4s ease;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+    }
+
+    .header-title-container { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      border-bottom: 2.5px solid #D30000; 
+      padding-bottom: 8px; 
+      width: 100%; 
+      justify-content: space-between; 
+      transition: all 0.4s ease;
+    }
+    
+    .logo-bracket { 
+      width: 42px; 
+      height: 42px; 
+      background: #000; 
+      border-left: 3.5px solid #D30000; 
+      border-radius: 5px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      padding-left: 4px; 
+      box-sizing: border-box; 
+    }
+    
+    .logo-bracket img { 
+      width: 34px; 
+      height: 34px; 
+      border-radius: 50%; 
+      object-fit: cover; 
+    }
+    
+    .header-left-group { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+    }
+    
+    .header-left-group h2 { 
+      color: #ffffff; 
+      font-size: 1rem; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+      margin: 0; 
+    }
+
+    .counter-text {
+      color: #888;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .progress-container { 
+      width: 100%; 
+      background: #222; 
+      height: 4px; 
+      border-radius: 2px; 
+      margin-bottom: 20px; 
+      overflow: hidden; 
+    }
+    
+    .progress-bar { 
+      height: 100%; 
+      background: #D30000; 
+      width: 0%; 
+      transition: width 0.4s ease; 
+    }
+
+    .exercise-block {
+      background: #111;
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid #222;
+      box-sizing: border-box;
+    }
+
+    .question-context {
+      color: #888;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      text-align: center;
+      display: block;
+      letter-spacing: 0.5px;
+    }
+
+    .question-text { 
+      color: #ffffff; 
+      font-size: 1.2rem; 
+      font-weight: 700; 
+      margin-bottom: 25px; 
+      line-height: 1.4; 
+      text-align: center; 
+      display: block;
+    }
+    
+    .selection-grid { 
+      display: flex;
+      flex-direction: column;
+      gap: 12px; 
+      margin-bottom: 15px; 
+    }
+
+    .option-btn {
+      background: #000; 
+      border: 1.5px solid #444; 
+      border-bottom: 3px solid #222;
+      border-radius: 8px;
+      padding: 16px 15px; 
+      color: white; 
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.95rem; 
+      font-weight: 700; 
+      cursor: pointer; 
+      transition: all 0.2s;
+      text-align: left;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: #666;
+      background: #050505;
+    }
+
+    .option-btn.correct-state { 
+      background-color: #002b0c !important;
+      border: 2px solid #00FF00 !important; 
+      border-bottom: 3px solid #00FF00 !important;
+      color: #00FF00 !important; 
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+      transform: scale(1.01);
+    }
+    
+    .option-btn.incorrect-state { 
+      background-color: #421b1b !important;
+      border: 2px solid #D30000 !important; 
+      border-bottom: 3px solid #D30000 !important;
+      color: #D30000 !important; 
+      animation: shake 0.4s; 
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    .btn-next { 
+      width: 100%; 
+      border: none; 
+      padding: 14px; 
+      border-radius: 8px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      margin-top: 10px; 
+      display: none; 
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem; 
+      letter-spacing: 0.5px;
+    }
+
+    .next-correct { background: #00FF00 !important; color: #000 !important; }
+    .next-wrong { background: #D30000 !important; color: #fff !important; }
+
+    .feedback { 
+      margin-top: 15px; 
+      font-weight: 700; 
+      display: none; 
+      padding: 10px; 
+      font-size: 0.9rem; 
+      text-align: center; 
+      line-height: 1.4; 
+    }
+
+    .btn-restart { 
+      width: 100%; 
+      border: none; 
+      padding: 14px; 
+      border-radius: 8px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem; 
+      letter-spacing: 0.5px;
+      transition: background 0.3s; 
+    }
+    .restart-red { background: #D30000; color: white; }
+    .restart-green { background: #00FF00; color: black; box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+
+    .finish-screen { text-align: center; color: white; display: none; padding: 10px; }
+    
+    .finish-screen h3 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .score-val { font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 15px; }
+
+    @media (max-width: 768px) {
+      .action-card { padding: 15px; border-left-width: 4px; }
+      .exercise-block { padding: 15px; }
+      .logo-bracket { width: 36px; height: 36px; }
+      .logo-bracket img { width: 28px; height: 28px; }
+      .header-left-group h2 { font-size: 0.85rem; }
+      .counter-text { font-size: 0.8rem; }
+      .question-context { font-size: 0.75rem; }
+      .question-text { font-size: 1rem; margin-bottom: 18px; }
+      .option-btn { padding: 14px 10px; font-size: 0.85rem; border-radius: 6px; border-bottom-width: 2px; }
+      .btn-next { padding: 12px; font-size: 0.75rem; border-radius: 6px; }
+      .feedback { font-size: 0.8rem; }
+      .finish-screen h3 { font-size: 1.3rem; }
+      .score-val { font-size: 1.5rem; }
+      .btn-restart { padding: 12px; font-size: 0.75rem; border-radius: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="action-card" id="main-card">
+    <div class="section-header">
+      <div class="header-title-container" id="main-header">
+        <div class="header-left-group">
+          <div class="logo-bracket"><img src="https://drive.google.com/thumbnail?id=1DQWHMZf7MpnzZBa3CbqqyJGLQEK6U4lZ" alt="Kira"></div>
+          <h2>multiple choice</h2>
+        </div>
+        <span id="counter" class="counter-text">1/20</span>
+      </div>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div id="quiz-content">
+      <div class="exercise-block">
+        <span class="question-context">¿Cómo se dice en inglés?</span>
+        <span class="question-text" id="q-text">Cargando...</span>
+        
+        <div class="selection-grid" id="options-container">
+          <!-- Opciones dinámicas -->
+        </div>
+        
+        <button class="btn-next" id="next-btn" onclick="nextQuestion()">SIGUIENTE PREGUNTA →</button>
+        <div id="q-feedback" class="feedback"></div>
+      </div>
+    </div>
+
+    <div id="finish-screen" class="finish-screen">
+      <h3 id="finish-title" style="color:#00FF00;">¡EJERCICIO COMPLETADO!</h3>
+      <div id="score-display" class="score-val"></div>
+      <button class="btn-restart" id="restart-btn" onclick="restartQuiz()">REINTENTAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Banco de preguntas depurado. Los errores están únicamente en los sustantivos. Verbos fijos en todas las opciones.
+  const quizData = [
+    { 
+      q: "Yo tengo 3 cervezas.", 
+      options: ["I have 3 beer.", "I have 3 beers.", "I have 3 beeres."], 
+      correct: 1, 
+      why: "Regla general: Añadimos simplemente una -s al final de 'beer'." 
+    },
+    { 
+      q: "Ana tiene 4 amigas.", 
+      options: ["Ana has 4 friends.", "Ana has 4 friendes.", "Ana has 4 friend."], 
+      correct: 0, 
+      why: "Regla general: Añadimos una -s al sustantivo regular 'friend'." 
+    },
+    { 
+      q: "Juan tiene 5 cuchillos.", 
+      options: ["Juan has 5 knifes.", "Juan has 5 knives.", "Juan has 5 knife."], 
+      correct: 1, 
+      why: "Regla especial: Los sustantivos terminados en -fe cambian por -ves (knife -> knives)." 
+    },
+    { 
+      q: "Laura tiene 2 lobos.", 
+      options: ["Laura has 2 wolfs.", "Laura has 2 wolves.", "Laura has 2 wolfes."], 
+      correct: 1, 
+      why: "Regla especial: Los sustantivos terminados en -f cambian por -ves (wolf -> wolves)." 
+    },
+    { 
+      q: "Martha tiene 3 gatos.", 
+      options: ["Martha has 3 cats.", "Martha has 3 cates.", "Martha has 3 cat."], 
+      correct: 0, 
+      why: "Añadimos simplemente una -s al final de 'cat' por ser regular." 
+    },
+    { 
+      q: "Yo tengo 2 motos.", 
+      options: ["I have 2 bikes.", "I have 2 bies.", "I have 2 bikess."], 
+      correct: 0, 
+      why: "Plural regular de 'bike' añadiendo únicamente una -s." 
+    },
+    { 
+      q: "Yo necesito 20 dólares.", 
+      options: ["I need 20 dollars.", "I need 20 dollares.", "I need 20 dollar."], 
+      correct: 0, 
+      why: "El sustantivo 'dollar' se convierte en plural agregando una -s." 
+    },
+    { 
+      q: "Tú recibes 10 dólares.", 
+      options: ["You get 10 dollar.", "You get 10 dollares.", "You get 10 dollars."], 
+      correct: 2, 
+      why: "Sustantivo plural regular: se le añade -s al final de 'dollar'." 
+    },
+    { 
+      q: "Los gatos no pueden ladrar.", 
+      options: ["The cats cannot bark.", "Cats cannot bark.", "Cates cannot bark."], 
+      correct: 1, 
+      why: "Al generalizar con sustantivos en plural, NO se utiliza el artículo definido 'the'." 
+    },
+    { 
+      q: "Los políticos pueden mentir.", 
+      options: ["Politicians can lie.", "The politicians can lie.", "Politicianes can lie."], 
+      correct: 0, 
+      why: "Omitimos el artículo 'the' porque estamos hablando de los políticos en sentido general." 
+    },
+    { 
+      q: "Los niños quieren jugar.", 
+      options: ["The kids want to play.", "Kides want to play.", "Kids want to play."], 
+      correct: 2, 
+      why: "Omitimos el artículo 'the' por ser una generalización." 
+    },
+    { 
+      q: "Las mujeres tienen que gobernar los hombres.", 
+      options: ["Girls have to rule boys.", "The girls have to rule boys.", "Girls have to rule the boys."], 
+      correct: 0, 
+      why: "No usamos 'the' en ninguna de las partes porque hablamos de generalidades (mujeres / hombres)." 
+    },
+    { 
+      q: "Los hombres tienen que obedecer a las mujeres.", 
+      options: ["The boys have to obey women.", "Boys have to obey women.", "Boys have to obey the women."], 
+      correct: 1, 
+      why: "Tanto 'boys' como 'women' omiten 'the' al referirse a los grupos a nivel general." 
+    },
+    { 
+      q: "Los soldados no pueden disparar a civiles.", 
+      options: ["Soldiers cannot shoot civilians.", "The soldiers cannot shoot civilians.", "Soldiers cannot shoot the civilians."], 
+      correct: 0, 
+      why: "Generalización: prescindimos de 'the' para ambos sustantivos plurales." 
+    },
+    { 
+      q: "Los bancos quieren tomar dinero.", 
+      options: ["The banks want to take money.", "Bankes want to take money.", "Banks want to take money."], 
+      correct: 2, 
+      why: "Hablamos de los bancos en sentido general, por lo tanto no colocamos 'the'." 
+    },
+    { 
+      q: "Los padres tienen que proteger a los niños.", 
+      options: ["The parents have to protect kids.", "Parents have to protect kids.", "Parents have to protect the kids."], 
+      correct: 1, 
+      why: "Tanto 'parents' como 'kids' prescinden por completo del artículo 'the' en contextos generales." 
+    },
+    { 
+      q: "Los jueces condenan a los criminales.", 
+      options: ["Judges condemn criminals.", "The judges condemn criminals.", "Judges condemn the criminals."], 
+      correct: 0, 
+      why: "Sin artículo 'the' por tratarse de una afirmación generalizada en plural." 
+    },
+    { 
+      q: "Quiero ganar trofeos.", 
+      options: ["I want to win trophys.", "I want to win trophies.", "I want to win trophy."], 
+      correct: 1, 
+      why: "Regla de la -y: Si termina en consonante + y (trophy), cambiamos la -y por -ies." 
+    },
+    { 
+      q: "Quiero cambiar de carrera.", 
+      options: ["I want to change careers.", "I want to change careeres.", "I want to change career."], 
+      correct: 0, 
+      why: "Plural estándar de 'career' añadiendo únicamente una -s al final." 
+    },
+    { 
+      q: "Puedo escribir poemas y cantar canciones.", 
+      options: ["I can write poemes and sing songes.", "I can write poems and sing songs.", "I can write poemes and sing songs."], 
+      correct: 1, 
+      why: "Tanto 'poems' como 'songs' son sustantivos plurales totalmente regulares." 
+    }
+  ];
+
+  let currentIdx = 0;
+  let score = 0;
+  let answered = false;
+
+  function loadQuestion() {
+    answered = false;
+    const progressBar = document.getElementById('progress-bar');
+    const nextBtn = document.getElementById('next-btn');
+    const feedback = document.getElementById('q-feedback');
+    const optionsContainer = document.getElementById('options-container');
+    
+    feedback.style.display = "none";
+    nextBtn.style.display = "none";
+    nextBtn.className = "btn-next";
+    optionsContainer.innerHTML = "";
+
+    const q = quizData[currentIdx];
+    document.getElementById('q-text').innerText = q.q;
+    document.getElementById('counter').innerText = `${currentIdx + 1}/${quizData.length}`;
+    progressBar.style.width = `${((currentIdx + 1) / quizData.length) * 100}%`;
+
+    q.options.forEach((optionText, index) => {
+      const button = document.createElement('button');
+      button.className = "option-btn";
+      button.innerText = optionText;
+      button.setAttribute('onclick', `handleSelect(${index})`);
+      optionsContainer.appendChild(button);
+    });
+  }
+
+  function handleSelect(selectedIndex) {
+    if (answered) return;
+    answered = true;
+
+    const q = quizData[currentIdx];
+    const optionsContainer = document.getElementById('options-container');
+    const buttons = optionsContainer.getElementsByTagName('button');
+    const fb = document.getElementById('q-feedback');
+    const nextBtn = document.getElementById('next-btn');
+
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = true;
+    }
+
+    buttons[q.correct].classList.add('correct-state');
+    fb.style.display = "block";
+
+    if (selectedIndex === q.correct) {
+      score++;
+      fb.style.color = "#00FF00";
+      fb.innerHTML = "¡CORRECTO!";
+      nextBtn.classList.add('next-correct');
+    } else {
+      buttons[selectedIndex].classList.add('incorrect-state');
+      fb.style.color = "#D30000";
+      fb.innerHTML = `Incorrecto.<br><small style="color:#888; text-transform:none; font-style:italic; font-weight:400; margin-top:5px; display:block;">${q.why}</small>`;
+      nextBtn.classList.add('next-wrong');
+    }
+
+    nextBtn.style.display = "block";
+  }
+
+  function nextQuestion() {
+    currentIdx++;
+    if (currentIdx < quizData.length) {
+      loadQuestion();
+    } else {
+      showFinish();
+    }
+  }
+
+  function showFinish() {
+    document.getElementById('quiz-content').style.display = "none";
+    const finishScreen = document.getElementById('finish-screen');
+    finishScreen.style.display = "block";
+    document.getElementById('score-display').innerText = `${score} / ${quizData.length}`;
+    
+    const restartBtn = document.getElementById('restart-btn');
+    if (score === quizData.length) {
+      restartBtn.innerText = "¡EXCELENTE TRABAJO PERFECTO! 🔥";
+      restartBtn.className = "btn-restart restart-green";
+    } else {
+      restartBtn.innerText = "REINTENTAR EL EJERCICIO";
+      restartBtn.className = "btn-restart restart-red";
+    }
+  }
+
+  function restartQuiz() {
+    currentIdx = 0; 
+    score = 0;
+    document.getElementById('quiz-content').style.display = "block";
+    document.getElementById('finish-screen').style.display = "none";
+    loadQuestion();
+  }
+
+  window.onload = loadQuestion;
+</script>
+</body>
+</html>
